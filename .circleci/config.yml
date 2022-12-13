@@ -1,0 +1,14 @@
+version: 2.1
+
+workflows:
+  test-flow:
+    jobs:
+      - get-node-version
+
+jobs:
+  get-node-version:
+    docker:
+      - image: cimg/node:19.2.0
+    steps:
+      - checkout
+      - run: node --version
