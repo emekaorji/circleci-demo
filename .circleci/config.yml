@@ -1,19 +1,5 @@
 version: 2.1
 
-workflows:
-  scheduled-test-flow:
-    triggers:
-      - schedule:
-          cron: 0 * * * *
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - test
-      - build
-      - deploy
-
 jobs:
   test:
     docker:
@@ -45,3 +31,18 @@ jobs:
       - run:
           name: Deploy App
           command: echo "I am being deployed"
+
+workflows:
+  version: 2
+  scheduled-flow:
+    triggers:
+      - schedule:
+          cron: "0 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - test
+      - build
+      - deploy
