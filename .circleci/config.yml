@@ -3,12 +3,20 @@ version: 2.1
 workflows:
   test-flow:
     jobs:
-      - get-node-version
+      - app-test
 
 jobs:
-  get-node-version:
+  app-test:
     docker:
       - image: cimg/node:19.2.0
     steps:
       - checkout
-      - run: node --version
+      - run:
+          name: Install Deps
+          command: yarn install
+      - run:
+          name: Run tests
+          command: yarn test
+      - run:
+          name: Build App
+          command: yarn build
