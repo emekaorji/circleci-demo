@@ -1,12 +1,21 @@
 version: 2.1
 
 workflows:
-  test-flow:
+  scheduled-test-flow:
+    triggers:
+      - schedule:
+          cron: 0 * * * *
+          filters:
+            branches:
+              only:
+                - master
     jobs:
-      - app-test
+      - test
+      - build
+      - deploy
 
 jobs:
-  app-test:
+  test:
     docker:
       - image: cimg/node:19.2.0
     steps:
@@ -17,6 +26,22 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
+  build:
+    docker:
+      - image: cimg/node:19.2.0
+    steps:
+      - checkout
+      - run:
+          name: Install Deps
+          command: yarn install
       - run:
           name: Build App
           command: yarn build
+  deploy:
+    docker:
+      - image: cimg/node:19.2.0
+    steps:
+      - checkout
+      - run:
+          name: Deploy App
+          command: echo "I am being deployed"
